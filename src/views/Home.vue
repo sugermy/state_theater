@@ -28,9 +28,7 @@
             <img :src="item.imgUrl" class="">
             <div class="i-info">
               <h3 class="info-title">{{item.name}}</h3>
-              <p class="info-time">{{item.time}}</p>
               <p class="info-explain">{{item.explain}}</p>
-              <p class="info-num">{{item.reside}}</p>
               <span class="ready-go" @click="toDetail(item)">立即预定</span>
             </div>
           </div>
@@ -42,9 +40,7 @@
 </template>
 
 <script>
-import { Toast } from 'mint-ui'
 export default {
-  name: 'Home',
   data() {
     return {
       loginName: '小笼包',
@@ -74,29 +70,25 @@ export default {
           imgUrl: require('../assets/mini_code.jpg'),
           name: '话剧舞台演出',
           time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...',
-          reside: '剩余：90'
+          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
         },
         {
           imgUrl: require('../assets/mini_code.jpg'),
           name: '话剧舞台演出',
           time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...',
-          reside: '剩余：90'
+          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
         },
         {
           imgUrl: require('../assets/mini_code.jpg'),
           name: '话剧舞台演出',
           time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...',
-          reside: '剩余：90'
+          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
         },
         {
           imgUrl: require('../assets/mini_code.jpg'),
           name: '话剧舞台演出',
           time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...',
-          reside: '剩余：90'
+          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
         }
       ],
       allLoaded: false
@@ -231,7 +223,7 @@ export default {
     .product-list {
       height: calc(100% - 60px);
       .pro-item {
-        height: 140px;
+        height: 100px;
         background: rgba(255, 255, 255, 1);
         border-radius: 8px;
         display: flex;
@@ -239,32 +231,24 @@ export default {
         margin-bottom: 8px;
         padding: 10px;
         img {
-          width: 100px;
-          height: 100px;
+          width: 120px;
+          height: 80px;
         }
         .i-info {
           position: relative;
-          height: 100%;
-          margin-left: 2%;
+          height: 80px;
+          margin-left: 4%;
           display: flex;
           flex-direction: column;
-          justify-content: space-around;
           .info-title {
             font-size: 15px;
             font-weight: 500;
             color: rgba(56, 77, 86, 1);
           }
-          .info-time {
-            font-size: 12px;
-            color: rgba(149, 160, 163, 1);
-          }
           .info-explain {
             font-size: 12px;
+            margin-top: 5px;
             color: rgba(149, 160, 163, 1);
-          }
-          .info-num {
-            font-size: 12px;
-            color: rgba(56, 77, 86, 1);
           }
           .ready-go {
             position: absolute;
@@ -286,11 +270,11 @@ export default {
   }
   .back-home {
     position: fixed;
-    bottom: 0%;
+    bottom: 4%;
     right: 0%;
     width: 85px;
     height: 85px;
-    background: url('../assets/back_home.png') no-repeat;
+    background: url('../assets/go_list.png') no-repeat;
   }
 }
 </style>
