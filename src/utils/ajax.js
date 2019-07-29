@@ -1,45 +1,48 @@
-import axios from 'axios';
-import { Promise } from 'q';
-import { Toast } from 'mint-ui';
-let baseUrl = 'http://192.168.33.174';
-
-axios.interceptors.request.use(
-  config => {
-    return config;
-  },
-  error => {
-    console.log(error);
-    return Promise.reject(error);
-  }
-);
-
-axios.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => {
-    console.log(error);
-    return Promise.reject(error);
-  }
-);
-
-export default {
-  get(url, data, params) {
-    return new Promise(function(resolve, reject) {
-      axios
-        .request({
-          method: 'get',
-          url: baseUrl + url,
-          data: data,
-          params: params
-        })
-        .then(res => {
-          resolve(res);
-        })
-        .catch(err => {
-          Toast('请求失败');
-          resolve(err);
-        });
+import axios from "axios";
+import { Promise } from "q";
+import { Toast } from "mint-ui";
+export default class Ajax {
+  /**
+   * @param { String } baseURL        基础请求地址
+   * @param { Number } timeout        超时时间
+   */
+  constructor(baseURL = "", timeout = 20000) {
+    // 创建一个新的axios实例，并设置默认请求地址和请求头
+    this._axios = axios.create({
+      baseURL,
+      timeout,
+      headers: {}
     });
+    this._axios.interceptors.request.use(
+      config => {
+        return config;
+      },
+      error => {
+        Toast("请求失败");
+        return Promise.reject(error);
+      }
+    );
+    this._axios.interceptors.response.use(
+      response => {
+        return response;
+      },
+      error => {
+        Toast("请求失败");
+        return Promise.reject(error);
+      }
+    );
   }
-};
+  // 各种请求
+  get(url, params = {}) {
+    return this._axios({ method: "get", url, params });
+  }
+  post(url, params = {}, data = {}) {
+    return this._axios({ method: "post", url, params, data });
+  }
+  delete(url, params = {}, data = {}) {
+    return this._axios({ method: "delete", url, params, data });
+  }
+  put(url, params = {}, data = {}) {
+    return this._axios({ method: "put", url, params, data });
+  }
+}

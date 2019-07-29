@@ -8,9 +8,11 @@
 <script>
 export default {
   created() {
-    this.$get('/Order/GetProductList', '', '').then(res => {
-      console.log(res)
-    })
+    this.$ajax
+      .get('/api/movie/in_theaters', { city: '北京', start: 1, count: 25 })
+      .then(res => {
+        console.log(res)
+      })
   },
   methods: {
     //查看列表
