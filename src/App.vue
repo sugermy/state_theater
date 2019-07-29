@@ -7,6 +7,11 @@
 </template>
 <script>
 export default {
+  created() {
+    this.$get('/Order/GetProductList', '', '').then(res => {
+      console.log(res)
+    })
+  },
   methods: {
     //查看列表
     goList() {

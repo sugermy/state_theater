@@ -1,14 +1,34 @@
 import axios from 'axios';
 import { Promise } from 'q';
 import { Toast } from 'mint-ui';
-let baseUrl = '';
+let baseUrl = 'http://192.168.33.174';
+
+axios.interceptors.request.use(
+  config => {
+    return config;
+  },
+  error => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
 
 export default {
-  get(method, url, data, params) {
+  get(url, data, params) {
     return new Promise(function(resolve, reject) {
       axios
         .request({
-          method: method,
+          method: 'get',
           url: baseUrl + url,
           data: data,
           params: params
@@ -17,7 +37,7 @@ export default {
           resolve(res);
         })
         .catch(err => {
-          Toast('请求错误');
+          Toast('请求失败');
           resolve(err);
         });
     });
