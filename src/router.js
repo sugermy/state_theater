@@ -12,6 +12,7 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/Home',
       meta: {
         title: '首页'
       }

@@ -1,6 +1,5 @@
 <template>
   <div class="order-content">
-    <div style="height:8px"></div>
     <div class="pro-item">
       <img :src="imgUrl" class="">
       <div class="i-info">
@@ -56,6 +55,7 @@ export default {
 .order-content {
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: rgba(243, 247, 250, 1);
   .pro-item {
     height: 100px;
@@ -63,8 +63,9 @@ export default {
     border-radius: 8px;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 10px 22px;
     margin-bottom: 16px;
+    margin-top: 8px;
     img {
       width: 100px;
       height: 80px;

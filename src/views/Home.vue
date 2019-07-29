@@ -35,7 +35,6 @@
         </div>
       </mt-loadmore>
     </div>
-    <div class="back-home" @click="goList"></div>
   </div>
 </template>
 
@@ -122,12 +121,7 @@ export default {
       this.allLoaded = true // 若数据已全部获取完毕
       this.$refs.loadmore.onBottomLoaded()
     },
-    //查看列表
-    goList() {
-      this.$router.push({
-        path: '/OrderList'
-      })
-    },
+
     //跳转详情查看购买页面
     toDetail(item) {
       this.$router.push({
@@ -140,7 +134,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .home-content {
-  position: relative;
   .header-show {
     height: 60px;
     line-height: 60px;
@@ -212,6 +205,7 @@ export default {
             background: #fff;
             border-radius: 4px;
             text-align: center;
+            z-index: 10;
             .pull-active {
               background: #5298ff;
               color: #fff;
@@ -242,12 +236,13 @@ export default {
           flex-direction: column;
           .info-title {
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
             color: rgba(56, 77, 86, 1);
           }
           .info-explain {
             font-size: 12px;
             margin-top: 5px;
+            line-height: 18px;
             color: rgba(149, 160, 163, 1);
           }
           .ready-go {
@@ -267,14 +262,6 @@ export default {
         }
       }
     }
-  }
-  .back-home {
-    position: fixed;
-    bottom: 4%;
-    right: 0%;
-    width: 85px;
-    height: 85px;
-    background: url('../assets/go_list.png') no-repeat;
   }
 }
 </style>

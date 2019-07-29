@@ -1,8 +1,22 @@
 <template>
   <div id="app">
     <router-view />
+    <div class="back-home" @click="goList"></div>
+
   </div>
 </template>
+<script>
+export default {
+  methods: {
+    //查看列表
+    goList() {
+      this.$router.push({
+        path: 'OrderList'
+      })
+    }
+  }
+}
+</script>
 
 <style lang="less">
 #app {
@@ -13,5 +27,14 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  position: relative;
+}
+.back-home {
+  position: fixed;
+  bottom: 4%;
+  right: 0%;
+  width: 85px;
+  height: 85px;
+  background: url('./assets/go_list.png') no-repeat;
 }
 </style>
