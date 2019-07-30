@@ -2,7 +2,7 @@
   <div class="por-detail">
     <div class="pro-main">
       <img :src="imgUrl">
-      <h3 class="d-title">话剧舞台演出</h3>
+      <h3 class="d-title">{{CircusInfo.sCircusShowName}}</h3>
       <div class="d-time">场次信息：{{(CircusInfo.BeginDate?CircusInfo.BeginDate+' - '+CircusInfo.EndDate.split(' ')[1]:'')}}</div>
       <p class="d-num">剩余：{{CircusInfo.nPersonNumber}}</p>
       <div class="d-rules">
@@ -15,7 +15,7 @@
     <div class="detail-info">
       <h3 class="d-info-h"><i class="d-info-i"></i>详细信息</h3>
       <p class="d-info-m">{{CircusInfo.sCircusShowDesc}}</p>
-      <button class="btn" @click="goOrder">立即预定</button>
+      <button class="btn" @click="goOrder(CircusInfo.nT_Circus_ID)">立即预定</button>
     </div>
   </div>
 </template>
@@ -30,28 +30,23 @@ export default {
   },
   created () {
     if (this.$route.query.Circus_ID) {
-      this.getProInfp(this.$route.query.Circus_ID)
-      this.getNoUes(this.$route.query.Circus_ID)
+      this.getProInfo(this.$route.query.Circus_ID)
     }
   },
   methods: {
-    //获取产品列表
-    getProInfp (id) {
+    //获取产品详情
+    getProInfo (id) {
       this.$ajax.get('GetProductList', { Circus_ID: id }).then(res => {
         this.CircusInfo = res.Data[0] || {}
       })
     },
-    //获取余票
-    getNoUes (id) {
-      this.$ajax.get('GetNum', { Circus_ID: id }).then(res => {
-        console.log(res);
-
-      })
-    },
-    goOrder () {
-      this.$router.push({
-        path: '/Order'
-      })
+    goOrder (Circus_ID) {
+      if (Circus_ID) {
+        this.$router.push({
+          path: '/Order',
+          query: { Circus_ID: Circus_ID }
+        })
+      }
     },
   }
 }

@@ -4,11 +4,11 @@
       <img :src="imgUrl" class="">
       <div class="i-info">
         <div>
-          <h3 class="info-title">话剧舞台演出</h3>
-          <p class="info-time">时间：2019.08.08 12:00-14:00</p>
-          <p class="info-explain">该剧保留了原歌剧的重要唱段，以清唱剧的形式...</p>
+          <h3 class="info-title">{{CircusInfo.sCircusShowName}}</h3>
+          <p class="info-time">时间：{{(CircusInfo.BeginDate?CircusInfo.BeginDate+' - '+CircusInfo.EndDate.split(' ')[1]:'')}}</p>
+          <p class="info-explain">{{CircusInfo.sCircusShowDesc}}</p>
         </div>
-        <p class="info-num">剩余：90</p>
+        <p class="info-num">剩余：{{CircusInfo.nPersonNumber}}</p>
       </div>
     </div>
     <div class="post-order">
@@ -16,15 +16,15 @@
       <div class="p-master">
         <p class="p-master-i">
           <label class="p-master-lab">姓名</label>
-          <input class="p-master-ipt" type="text" :v-model="toterName" value="饺子" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterName" :value="toterInfo.toterName" @input="changeData($event,1)" />
         </p>
         <p class="p-master-i">
           <label class="p-master-lab">手机号</label>
-          <input class="p-master-ipt" type="text" :v-model="toterPhone" value="18520838663" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterPhone" :value="toterInfo.toterPhone" @input="changeData($event,2)" />
         </p>
         <p class="p-master-i">
           <label class="p-master-lab">身份证</label>
-          <input class="p-master-ipt" type="text" :v-model="toterNo" value="411381199409054817" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterNo" :value="toterInfo.toterNo" @input="changeData($event,3)" />
         </p>
       </div>
     </div>
@@ -38,16 +38,49 @@ export default {
   data () {
     return {
       imgUrl: require('../assets/theater_small.png'),
-      toterName: '',
-      toterPhone: '',
-      toterNo: ''
+      CircusInfo: {},//初始化信息
+      toterPhone: '18520838663',
+
+      toterInfo: {
+        toterName: '张满意',
+        toterPhone: '18520838663',
+        toterNo: '411381199409054817'
+      }//提交实体
+    }
+  },
+  created () {
+    if (this.$route.query.Circus_ID) {
+      this.getProInfo(this.$route.query.Circus_ID)
     }
   },
   methods: {
-    initOrder () {
-      this.$router.push({
-        path: '/OrderDetail'
+    //数据变化
+    changeData (e, n) {
+      switch (n) {
+        case 1:
+          this.toterInfo.toterName = e.target.value;
+          break;
+        case 2:
+          this.toterInfo.toterPhone = e.target.value;
+          break;
+        case 3:
+          this.toterInfo.toterNo = e.target.value;
+          break;
+        default:
+          break;
+      }
+    },
+    //获取产品详情
+    getProInfo (id) {
+      this.$ajax.get('GetProductList', { Circus_ID: id }).then(res => {
+        this.CircusInfo = res.Data[0] || {}
       })
+    },
+    initOrder () {
+      console.log(this.toterInfo)
+      // this.$router.push({
+      //   path: '/OrderDetail'
+      // })
     }
   }
 }
@@ -92,6 +125,11 @@ export default {
         line-height: 18px;
         margin-top: 10px;
         color: rgba(149, 160, 163, 1);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
       .info-num {
         font-size: 12px;

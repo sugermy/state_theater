@@ -29,7 +29,7 @@
               <p class="info-time">时间：{{(item.BeginDate?item.BeginDate+' - '+item.EndDate.split(' ')[1]:'')}}</p>
               <p class="info-explain">{{item.sCircusShowDesc}}</p>
               <p class="info-less">剩余：{{item.nPersonNumber}}</p>
-              <span class="ready-go" @click="toDetail(item.nT_Circus_ID)">立即抢票</span>
+              <span class="ready-go" @click="toDetail(item.nPersonNumber,item.nT_Circus_ID)">立即抢票</span>
             </div>
           </div>
         </div>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui';
+
 export default {
   data () {
     return {
@@ -70,9 +72,13 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.wxUser != {}) {
+    if (this.$store.state.wxUser && this.$store.state.wxUser != {}) {
       this.userImg = this.$store.state.wxUser.headImg
       this.loginName = this.$store.state.wxUser.nickname
+    } else {
+      this.$ajax.get('getwxuser', {}).then(res => {
+        this.$store.dispatch('setUser', res.Data)
+      })
     }
     this.getProList()
   },
@@ -115,11 +121,16 @@ export default {
     },
 
     //跳转详情查看购买页面
-    toDetail (nT_Circus_ID) {
-      this.$router.push({
-        path: '/Detail',
-        query: { Circus_ID: nT_Circus_ID }
-      })
+    toDetail (num, Circus_ID) {
+      if (num == 0) {
+        Toast('暂无余票')
+      } else {
+        this.$router.push({
+          path: '/Detail',
+          query: { Circus_ID: Circus_ID }
+        })
+      }
+
     }
   }
 }
