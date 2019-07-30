@@ -2,8 +2,7 @@
   <div class="order-content">
     <div class="header-top">
       <div class="header-tabs">
-        <div class="bar" :class="activeTab==index?'bar-active':''" v-for="(item,index) in tabBar" :key="index"
-          @click="changeTab(index)">{{item}}
+        <div class="bar" :class="activeTab==index?'bar-active':''" v-for="(item,index) in tabBar" :key="index" @click="changeTab(index)">{{item}}
         </div>
       </div>
     </div>
@@ -34,13 +33,13 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       msg: '1123',
       activeTab: 0,
       tabBar: ['全部', '已使用', '未使用'],
       test: {
-        imgUrl: require('../assets/mini_code.jpg'),
+        imgUrl: require('../assets/theater_small.png'),
         name: '话剧舞台演出',
         type: '已使用',
         time: '2019.08.08 12:00-14:00',
@@ -49,7 +48,7 @@ export default {
     }
   },
   methods: {
-    changeTab(i) {
+    changeTab (i) {
       this.activeTab = i
     }
   }

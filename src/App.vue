@@ -2,24 +2,36 @@
   <div id="app">
     <router-view />
     <div class="back-home" @click="goList"></div>
-
   </div>
 </template>
 <script>
 export default {
-  created() {
-    this.$ajax
-      .get('/api/movie/in_theaters', { city: '北京', start: 1, count: 25 })
-      .then(res => {
-        console.log(res)
-      })
+  data () {
+    return {
+      routerPath: 'OrderList'
+    }
+  },
+  created () {
+    this.$ajax.get('getwxuser', {}).then(res => {
+      this.$store.dispatch('setUser', res.Data)
+    })
   },
   methods: {
     //查看列表
-    goList() {
+    goList () {
       this.$router.push({
-        path: 'OrderList'
+        path: this.routerPath
       })
+    }
+  },
+  watch: {
+    //监听路由变化  如果当前是列表页  我的 悬浮返回首页  否则为默认列表页
+    $route (v) {
+      if (v.name == 'OrderList') {
+        this.routerPath = '/Home'
+      } else {
+        this.routerPath = 'OrderList'
+      }
     }
   }
 }

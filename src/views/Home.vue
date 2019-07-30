@@ -2,34 +2,34 @@
   <div class="home-content">
     <header class="header-show">
       <h3>Hi,<span class="login-name">{{loginName}}</span></h3>
-      <div class="head-portrait"></div>
+      <div class="head-portrait">
+        <img :src="userImg">
+      </div>
     </header>
     <div class="content-main">
       <div class="main-header">
-        <div class="btn-l">
-          <span class="btn-i" v-for="(item,index) in tabCard" :key="index" :class="activeTab==index?'btn-active':''"
-            @click="changeTab(index)">{{item}}</span>
+        <!-- <div class="btn-l">
+          <span class="btn-i" v-for="(item,index) in tabCard" :key="index" :class="activeTab==index?'btn-active':''" @click="changeTab(index)">{{item}}</span>
         </div>
         <div class="select-r">
-          <label class="label-btn" :v-model="seletID" @click="changePull">{{selectArr[seletID].name}}<i class="open-po"
-              :class="pllMenuOpen?'pull-up':'pull-down'"></i>
+          <label class="label-btn" :v-model="seletID" @click="changePull">{{selectArr[seletID].name}}<i class="open-po" :class="pllMenuOpen?'pull-up':'pull-down'"></i>
             <ul class="pull-menu" v-show="pllMenuOpen">
-              <li v-for="(item,index) in selectArr" :key="index" :v-model="item.value"
-                :class="seletID==index?'pull-active':''" @click.stop="changeLabel(index)">
+              <li v-for="(item,index) in selectArr" :key="index" :v-model="item.value" :class="seletID==index?'pull-active':''" @click.stop="changeLabel(index)">
                 {{item.name}}</li>
             </ul>
           </label>
-        </div>
+        </div> -->
       </div>
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore"
-        style=" touch-action:pan-y">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" style=" touch-action:pan-y">
         <div class="product-list">
           <div class="pro-item" v-for="(item,index) in prolist" :key="index">
-            <img :src="item.imgUrl" class="">
+            <img src="../assets/theater_small.png" class="">
             <div class="i-info">
-              <h3 class="info-title">{{item.name}}</h3>
-              <p class="info-explain">{{item.explain}}</p>
-              <span class="ready-go" @click="toDetail(item)">立即预定</span>
+              <h3 class="info-title">{{item.sCircusShowName}}</h3>
+              <p class="info-time">时间：{{(item.BeginDate?item.BeginDate+' - '+item.EndDate.split(' ')[1]:'')}}</p>
+              <p class="info-explain">{{item.sCircusShowDesc}}</p>
+              <p class="info-less">剩余：{{item.nPersonNumber}}</p>
+              <span class="ready-go" @click="toDetail(item.nT_Circus_ID)">立即抢票</span>
             </div>
           </div>
         </div>
@@ -40,13 +40,14 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       loginName: '小笼包',
       tabCard: ['最近', '最热'],
       activeTab: 0,
       pllMenuOpen: false, //下拉菜单显示隐藏
       seletID: 0,
+      userImg: '',
       selectArr: [
         {
           name: '全部时间',
@@ -64,69 +65,60 @@ export default {
           value: 3
         }
       ],
-      prolist: [
-        {
-          imgUrl: require('../assets/mini_code.jpg'),
-          name: '话剧舞台演出',
-          time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
-        },
-        {
-          imgUrl: require('../assets/mini_code.jpg'),
-          name: '话剧舞台演出',
-          time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
-        },
-        {
-          imgUrl: require('../assets/mini_code.jpg'),
-          name: '话剧舞台演出',
-          time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
-        },
-        {
-          imgUrl: require('../assets/mini_code.jpg'),
-          name: '话剧舞台演出',
-          time: '时间：2019.08.08 12:00-14:00',
-          explain: '该剧保留了原歌剧的重要唱段，以清唱剧的形式...'
-        }
-      ],
+      prolist: [],//产品列表
       allLoaded: false
     }
   },
-  created() {},
-  mounted() {
+  created () {
+    if (this.$store.state.wxUser != {}) {
+      this.userImg = this.$store.state.wxUser.headImg
+      this.loginName = this.$store.state.wxUser.nickname
+    }
+    this.getProList()
+  },
+  mounted () {
     this.seletID = this.selectArr[0].index
   },
   methods: {
+    //获取产品列表
+    getProList () {
+      this.$ajax.get('GetProductList', { Circus_ID: '' }).then(res => {
+        console.log(res)
+        this.prolist = res.Data || []
+      })
+    },
+    getNum (id) {
+
+    },
     //切换tab 热门 最新
-    changeTab(i) {
+    changeTab (i) {
       this.activeTab = i
     },
     //控制下拉菜单
-    changePull() {
+    changePull () {
       this.pllMenuOpen = !this.pllMenuOpen
     },
     //切换li当前选择
-    changeLabel(i) {
+    changeLabel (i) {
       this.seletID = i
       this.pllMenuOpen = false
     },
-    loadTop() {
+    loadTop () {
       // 加载更多数据
-      this.prolist = this.prolist
+      this.getProList()
       this.$refs.loadmore.onTopLoaded()
     },
-    loadBottom() {
+    loadBottom () {
       // 加载更多数据
       this.allLoaded = true // 若数据已全部获取完毕
       this.$refs.loadmore.onBottomLoaded()
     },
 
     //跳转详情查看购买页面
-    toDetail(item) {
+    toDetail (nT_Circus_ID) {
       this.$router.push({
         path: '/Detail',
-        query: { id: item.value }
+        query: { Circus_ID: nT_Circus_ID }
       })
     }
   }
@@ -150,6 +142,10 @@ export default {
       width: 40px;
       height: 40px;
       background: red;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .content-main {
@@ -217,7 +213,7 @@ export default {
     .product-list {
       height: calc(100% - 60px);
       .pro-item {
-        height: 100px;
+        height: 140px;
         background: rgba(255, 255, 255, 1);
         border-radius: 8px;
         display: flex;
@@ -226,11 +222,12 @@ export default {
         padding: 10px;
         img {
           width: 120px;
-          height: 80px;
+          height: 120px;
         }
         .i-info {
           position: relative;
-          height: 80px;
+          width: calc(100% - 120px);
+          height: 120px;
           margin-left: 4%;
           display: flex;
           flex-direction: column;
@@ -239,16 +236,33 @@ export default {
             font-weight: 600;
             color: rgba(56, 77, 86, 1);
           }
+          .info-time {
+            margin: 10px 0;
+            line-height: 16px;
+            color: rgba(149, 160, 163, 1);
+          }
           .info-explain {
             font-size: 12px;
-            margin-top: 5px;
             line-height: 18px;
+            min-height: 32px;
             color: rgba(149, 160, 163, 1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+          .info-less {
+            font-size: 12px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(56, 77, 86, 1);
+            margin-top: 14px;
           }
           .ready-go {
             position: absolute;
             right: 0%;
-            bottom: 0%;
+            bottom: -14%;
             width: 80px;
             height: 30px;
             line-height: 30px;

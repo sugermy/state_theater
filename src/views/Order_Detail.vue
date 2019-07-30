@@ -30,21 +30,21 @@
 <script>
 import QRCode from 'qrcodejs2'
 export default {
-  data() {
+  data () {
     return {
-      imgUrl: require('../assets/mini_code.jpg'),
+      imgUrl: require('../assets/theater_small.png'),
       toterName: '',
       toterPhone: '',
       toterNo: ''
     }
   },
-  mounted() {
+  mounted () {
     this.creatQrCode()
   },
   methods: {
-    creatQrCode() {
+    creatQrCode () {
       new QRCode(this.$refs.qrCodeUrl, {
-        text: 'https://www.qtshe.com',
+        text: '1111',
         width: 100,
         height: 100,
         colorDark: '#000000',

@@ -6,6 +6,7 @@
         <div>
           <h3 class="info-title">话剧舞台演出</h3>
           <p class="info-time">时间：2019.08.08 12:00-14:00</p>
+          <p class="info-explain">该剧保留了原歌剧的重要唱段，以清唱剧的形式...</p>
         </div>
         <p class="info-num">剩余：90</p>
       </div>
@@ -34,16 +35,16 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
-      imgUrl: require('../assets/mini_code.jpg'),
+      imgUrl: require('../assets/theater_small.png'),
       toterName: '',
       toterPhone: '',
       toterNo: ''
     }
   },
   methods: {
-    initOrder() {
+    initOrder () {
       this.$router.push({
         path: '/OrderDetail'
       })
@@ -58,7 +59,7 @@ export default {
   overflow: hidden;
   background: rgba(243, 247, 250, 1);
   .pro-item {
-    height: 100px;
+    height: 140px;
     background: rgba(255, 255, 255, 1);
     border-radius: 8px;
     display: flex;
@@ -67,18 +68,18 @@ export default {
     margin-bottom: 16px;
     margin-top: 8px;
     img {
-      width: 100px;
-      height: 80px;
+      width: 120px;
+      height: 120px;
     }
     .i-info {
-      height: 80px;
+      height: 120px;
       margin-left: 2%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       .info-title {
         font-size: 15px;
-        font-weight: 500;
+        font-weight: 600;
         color: rgba(56, 77, 86, 1);
       }
       .info-time {
@@ -86,9 +87,15 @@ export default {
         margin-top: 10px;
         color: rgba(149, 160, 163, 1);
       }
+      .info-explain {
+        font-size: 12px;
+        line-height: 18px;
+        margin-top: 10px;
+        color: rgba(149, 160, 163, 1);
+      }
       .info-num {
         font-size: 12px;
-        color: #ff4f4f;
+        color: rgba(56, 77, 86, 1);
       }
     }
   }

@@ -3,68 +3,56 @@
     <div class="pro-main">
       <img :src="imgUrl">
       <h3 class="d-title">话剧舞台演出</h3>
+      <div class="d-time">场次信息：{{(CircusInfo.BeginDate?CircusInfo.BeginDate+' - '+CircusInfo.EndDate.split(' ')[1]:'')}}</div>
+      <p class="d-num">剩余：{{CircusInfo.nPersonNumber}}</p>
       <div class="d-rules">
         <div class="d-rules-i" v-for="(item,index) in rules" :key="index">
           <i class="d-rules-icon"></i>
           <span class="d-rules-t">{{item}}</span>
         </div>
       </div>
-      <p class="d-num">剩余：90</p>
     </div>
-    <div class="date-pick" @click="selectDate">
-      <span>请选择场次时间</span>
-      <span>{{selectWhich}}<i class="tile-p"></i></span>
-    </div>
-    <mt-actionsheet :actions="actions" v-model="selectTime">
-    </mt-actionsheet>
     <div class="detail-info">
       <h3 class="d-info-h"><i class="d-info-i"></i>详细信息</h3>
-      <p class="d-info-m">
-        该剧保留了原歌剧的重要唱段，以清唱剧的形式，展现抒情和刻画心理活动为主体的音乐题材，并采用立体式的全新舞台效果。该剧由歌剧《江姐》第三代扮演者，著名女高音歌唱家、歌剧表演艺术家，北京大学歌剧研究院院长、教授、中国歌剧研究会常务副主席金曼担纲主演，著名指挥家高嵩担任指挥,深圳大剧院合唱团合唱，深圳大剧院爱乐乐团伴奏，为建国70周年献礼。
-      </p>
+      <p class="d-info-m">{{CircusInfo.sCircusShowDesc}}</p>
       <button class="btn" @click="goOrder">立即预定</button>
     </div>
   </div>
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
-      imgUrl: require('../assets/mini_code.jpg'),
+      imgUrl: require('../assets/theater_big.png'),
       rules: ['电子票', '线下选座', '身份证'],
-      selectTime: false,
-      selectWhich: '',
-      actions: [
-        {
-          name: '12:00-14:00',
-          vale: 1,
-          method: this.changeData
-        },
-        {
-          name: '13:00-14:00',
-          vale: 2,
-          method: this.changeData
-        },
-        {
-          name: '15:00-14:00',
-          vale: 3,
-          method: this.changeData
-        }
-      ]
+      CircusInfo: {}
+    }
+  },
+  created () {
+    if (this.$route.query.Circus_ID) {
+      this.getProInfp(this.$route.query.Circus_ID)
+      this.getNoUes(this.$route.query.Circus_ID)
     }
   },
   methods: {
-    goOrder() {
+    //获取产品列表
+    getProInfp (id) {
+      this.$ajax.get('GetProductList', { Circus_ID: id }).then(res => {
+        this.CircusInfo = res.Data[0] || {}
+      })
+    },
+    //获取余票
+    getNoUes (id) {
+      this.$ajax.get('GetNum', { Circus_ID: id }).then(res => {
+        console.log(res);
+
+      })
+    },
+    goOrder () {
       this.$router.push({
         path: '/Order'
       })
     },
-    selectDate() {
-      this.selectTime = true
-    },
-    changeData(v) {
-      this.selectWhich = v.name
-    }
   }
 }
 </script>
@@ -77,7 +65,7 @@ export default {
   flex-direction: column;
   .pro-main {
     background: #fff;
-    padding-bottom: 14px;
+    padding-bottom: 6px;
     img {
       width: 100%;
       height: 250px;
@@ -88,6 +76,16 @@ export default {
       color: rgba(56, 77, 86, 1);
       margin-top: 16px;
       padding: 0 12px;
+    }
+    .d-time {
+      height: 26px;
+      line-height: 26px;
+      background: rgba(243, 237, 225, 1);
+      border-radius: 2px;
+      margin: 8px 12px;
+      text-indent: 6px;
+      color: rgba(192, 161, 95, 1);
+      font-size: 13px;
     }
     .d-rules {
       padding: 0 12px;
@@ -137,7 +135,7 @@ export default {
   }
   .detail-info {
     background: #fff;
-    height: calc(100vh - 413px);
+    height: calc(100vh - 381px);
     .d-info-h {
       padding: 0 12px;
       font-size: 13px;
