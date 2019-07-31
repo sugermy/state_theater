@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view />
-    <div class="back-home" @click="goList"></div>
+    <div :class="routerPath=='OrderList'?'go-list':'back-home'" @click="goList"></div>
   </div>
 </template>
 <script>
@@ -12,8 +12,12 @@ export default {
     }
   },
   created () {
-    this.$ajax.get('getwxuser', {}).then(res => {
-      this.$store.dispatch('setUser', res.Data)
+
+  },
+  mounted () {
+    document.body.addEventListener('focusout', () => {
+      // 回到原点  若觉得一瞬间回到底部不够炫酷，那自己可以自定义缓慢回弹效果， 可用css 、贝塞尔曲线、js的 requestAnimationFrame  等等 方法 实现体验性更好的回弹效果
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
     })
   },
   methods: {
@@ -48,12 +52,22 @@ export default {
   box-sizing: border-box;
   position: relative;
 }
-.back-home {
+.go-list {
   position: fixed;
   bottom: 4%;
   right: 0%;
   width: 85px;
   height: 85px;
   background: url('./assets/go_list.png') no-repeat;
+  background-size: 100% 100%;
+}
+.back-home {
+  position: fixed;
+  bottom: 4%;
+  right: 0%;
+  width: 85px;
+  height: 85px;
+  background: url('./assets/back_home.png') no-repeat;
+  background-size: 100% 100%;
 }
 </style>

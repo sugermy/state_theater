@@ -1,9 +1,9 @@
 <template>
   <div class="home-content">
     <header class="header-show">
-      <h3>Hi,<span class="login-name">{{loginName}}</span></h3>
+      <h3>Hi,<span class="login-name">您好！</span></h3>
       <div class="head-portrait">
-        <img :src="userImg">
+        <img src="../assets/theater_small.png">
       </div>
     </header>
     <div class="content-main">
@@ -72,14 +72,6 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.wxUser && this.$store.state.wxUser != {}) {
-      this.userImg = this.$store.state.wxUser.headImg
-      this.loginName = this.$store.state.wxUser.nickname
-    } else {
-      this.$ajax.get('getwxuser', {}).then(res => {
-        this.$store.dispatch('setUser', res.Data)
-      })
-    }
     this.getProList()
   },
   mounted () {
@@ -89,12 +81,8 @@ export default {
     //获取产品列表
     getProList () {
       this.$ajax.get('GetProductList', { Circus_ID: '' }).then(res => {
-        console.log(res)
-        this.prolist = res.Data || []
+        res.Code == '200' ? (this.prolist = res.Data || []) : Toast('获取产品失败')
       })
-    },
-    getNum (id) {
-
     },
     //切换tab 热门 最新
     changeTab (i) {
@@ -109,17 +97,17 @@ export default {
       this.seletID = i
       this.pllMenuOpen = false
     },
+    //下拉刷新数据
     loadTop () {
-      // 加载更多数据
       this.getProList()
       this.$refs.loadmore.onTopLoaded()
     },
+    //上拉加载分页--暂无
     loadBottom () {
       // 加载更多数据
       this.allLoaded = true // 若数据已全部获取完毕
       this.$refs.loadmore.onBottomLoaded()
     },
-
     //跳转详情查看购买页面
     toDetail (num, Circus_ID) {
       if (num == 0) {
@@ -152,15 +140,15 @@ export default {
     .head-portrait {
       width: 40px;
       height: 40px;
-      background: red;
       img {
         width: 100%;
         height: 100%;
+        border: 0;
+        border: none;
       }
     }
   }
   .content-main {
-    height: calc(100vh - 60px);
     background: rgb(243, 247, 250);
     padding: 0 12px;
     .main-header {

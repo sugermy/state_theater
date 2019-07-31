@@ -34,13 +34,14 @@
   </div>
 </template>
 <script>
+import { Toast } from 'mint-ui';
+
 export default {
   data () {
     return {
       imgUrl: require('../assets/theater_small.png'),
       CircusInfo: {},//初始化信息
-      toterPhone: '18520838663',
-
+      openID: '',
       toterInfo: {
         toterName: '张满意',
         toterPhone: '18520838663',
@@ -49,6 +50,7 @@ export default {
     }
   },
   created () {
+    this.openID = localStorage.getItem('openId') || '';
     if (this.$route.query.Circus_ID) {
       this.getProInfo(this.$route.query.Circus_ID)
     }
@@ -76,11 +78,50 @@ export default {
         this.CircusInfo = res.Data[0] || {}
       })
     },
+    //创建订单
     initOrder () {
-      console.log(this.toterInfo)
-      // this.$router.push({
-      //   path: '/OrderDetail'
-      // })
+      let params = {
+        nSceneTimeId: this.CircusInfo.nT_Circus_ID,
+        dSceneStartDate: this.CircusInfo.BeginDate.split(' ')[0],
+        sStartTimeSlot: this.CircusInfo.BeginDate.split(' ')[1],
+        dSceneEndDate: this.CircusInfo.EndDate.split(' ')[0],
+        sEndTimeSlot: this.CircusInfo.EndDate.split(' ')[1],
+        sIdCard: this.toterInfo.toterNo,
+        sName: this.toterInfo.toterName,
+        sTel: this.toterInfo.toterPhone,
+        OpenID: this.openID
+      }
+      let PHONE_test = /^[1][3,4,5,7,8][0-9]{9}$/;
+      let ID_test = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+      if (this.toterInfo.toterName == '') {
+        Toast('请输入游客姓名')
+        return
+      }
+      if (this.toterInfo.toterPhone == '') {
+        Toast('请输入手机号')
+        return
+      } else if (!PHONE_test.test(this.toterInfo.toterPhone)) {
+        Toast('请输入正确手机号')
+        return
+      }
+      if (this.toterInfo.toterNo == '') {
+        Toast('请输入身份证号')
+        return
+      } else if (!ID_test.test(this.toterInfo.toterNo)) {
+        Toast('请输入正确身份证号')
+        return
+      }
+      this.$ajax.get('SubmitOrder', { OrderJson: JSON.stringify(params) }).then(res => {
+        if (res.Code == '200') {
+          Toast(res.Message);
+          this.$router.push({
+            path: '/OrderDetail',
+            query: { OrderNo: res.Data }
+          })
+        } else {
+          Toast(res.Message)
+        }
+      })
     }
   }
 }

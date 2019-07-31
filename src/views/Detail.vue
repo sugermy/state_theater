@@ -20,6 +20,8 @@
   </div>
 </template>
 <script>
+import { Toast } from 'mint-ui';
+
 export default {
   data () {
     return {
@@ -29,23 +31,32 @@ export default {
     }
   },
   created () {
-    if (this.$route.query.Circus_ID) {
-      this.getProInfo(this.$route.query.Circus_ID)
-    }
+    this.$route.query.Circus_ID ? (this.getProInfo(this.$route.query.Circus_ID)) : Toast('获取详情失败')
   },
   methods: {
     //获取产品详情
     getProInfo (id) {
       this.$ajax.get('GetProductList', { Circus_ID: id }).then(res => {
-        this.CircusInfo = res.Data[0] || {}
+        res.Code == '200' ? (this.CircusInfo = res.Data[0] || {}) : Toast('获取详情失败')
       })
     },
+    //判断余票数据
+    hasNum (v) {
+      this.$ajax.get('UpdateOccupancy', { Circus_ID: v }).then(res => {
+        if (res.Data == 'true') {
+          this.$router.push({
+            path: '/Order',
+            query: { Circus_ID: v }
+          })
+        } else {
+          Toast('暂无余票')
+        }
+      })
+    },
+    //提交预定
     goOrder (Circus_ID) {
       if (Circus_ID) {
-        this.$router.push({
-          path: '/Order',
-          query: { Circus_ID: Circus_ID }
-        })
+        this.hasNum(Circus_ID)
       }
     },
   }
@@ -99,6 +110,7 @@ export default {
           width: 12px;
           height: 12px;
           background: url('../assets/true_right.png') no-repeat;
+          background-size: 100% 100%;
         }
         .d-rules-t {
           font-size: 12px;

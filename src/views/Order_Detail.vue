@@ -4,10 +4,10 @@
       <div class="main-head">
         <img :src="imgUrl">
         <div class="main-head-info">
-          <h3 class="info-title">话剧舞台演出</h3>
-          <p class="info-time">场次信息：2019.08.08 12:00-14 </p>
-          <p class="info-no"> 订单号：446574365736583 </p>
-          <p class="info-status">订单状态：<span>未使用</span></p>
+          <h3 class="info-title">{{OrderInfo.sCircusShowName}}</h3>
+          <p class="info-time">场次信息：{{(OrderInfo.dSceneStartDate?OrderInfo.dSceneStartDate.split('T')[0]+' ' +OrderInfo.sStartTimeSlot+'-'+OrderInfo.sEndTimeSlot:'')}}</p>
+          <p class="info-no"> 订单号：{{OrderInfo.sOrderNo}} </p>
+          <p class="info-status">订单状态：<span :style="(OrderInfo.nOrderState==1?'color:red':'')">{{(OrderInfo.nOrderState==1?'未使用':'已使用')}}</span></p>
         </div>
         <i class="position-icon position-left"></i>
         <i class="position-icon position-right"></i>
@@ -20,31 +20,40 @@
     <div class="tourist-info">
       <h3 class="tourist-info-head">游客信息</h3>
       <div class="tourist-info-main">
-        <p>姓名：饺子</p>
-        <p>手机号：18520838636</p>
-        <p>身份证：411381199409054817</p>
+        <p>姓名：{{OrderInfo.sName}}</p>
+        <p>手机号：{{OrderInfo.sTel}}</p>
+        <p>身份证：{{OrderInfo.sIdCard}}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { Toast } from 'mint-ui';
 import QRCode from 'qrcodejs2'
 export default {
   data () {
     return {
       imgUrl: require('../assets/theater_small.png'),
-      toterName: '',
-      toterPhone: '',
-      toterNo: ''
+      OrderInfo: {}
     }
   },
-  mounted () {
-    this.creatQrCode()
+  created () {
+    this.$route.query.OrderNo ? this.getDetail() : Toast('获取订单详情失败')
   },
   methods: {
-    creatQrCode () {
+    //获取用户生成订单详情
+    getDetail () {
+      this.$ajax.get('GetOrderDetail', { OrderNo: this.$route.query.OrderNo }).then(res => {
+        if (res.Code == '200') {
+          this.OrderInfo = res.Data[0] || {}
+          this.creatQrCode(this.OrderInfo.sIdCard)
+        }
+      })
+    },
+    //创建二维码
+    creatQrCode (IDcard) {
       new QRCode(this.$refs.qrCodeUrl, {
-        text: '1111',
+        text: IDcard,
         width: 100,
         height: 100,
         colorDark: '#000000',
