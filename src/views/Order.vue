@@ -6,7 +6,9 @@
         <div>
           <h3 class="info-title">{{CircusInfo.sCircusShowName}}</h3>
           <p class="info-time">时间：{{(CircusInfo.BeginDate?CircusInfo.BeginDate+' - '+CircusInfo.EndDate.split(' ')[1]:'')}}</p>
-          <p class="info-explain">{{CircusInfo.sCircusShowDesc}}</p>
+          <p class="info-explain">
+            山和水相依，风与雨洗礼。桑干源头，锦绣春秋，以“朔”字为文化符号的城市根脉在追溯、绵延、传承。可以看见峙峪石镞的智慧光芒，可以听见蒙恬筑城的骏马嘶鸣，可以望见宋辽故垒的刀光剑影，可以遇见崇福古刹的禅意幽静;圪针沟大移民的生命悲壮，驼铃商道的蜿蜒而行，还有班婕妤的伤感诗篇，尉迟恭的忠勇美名。难以忘怀太阳照耀下清河行动的坚韧，更会铭刻塞上绿洲、美丽朔州70年播撒绿荫的艰辛。自古而今，岁月流金，这片土地交织着爱与火的热烈，演绎着情与意的隽永，诠释着幸福与首善的内涵，播种着希望与梦想的光荣。
+          </p>
         </div>
         <p class="info-num">剩余：{{CircusInfo.nPersonNumber}}</p>
       </div>
@@ -34,8 +36,7 @@
   </div>
 </template>
 <script>
-import { Toast } from 'mint-ui';
-
+import { Toast, Indicator } from 'mint-ui';
 export default {
   data () {
     return {
@@ -43,10 +44,11 @@ export default {
       CircusInfo: {},//初始化信息
       openID: '',
       toterInfo: {
-        toterName: '张满意',
-        toterPhone: '18520838663',
-        toterNo: '411381199409054817'
-      }//提交实体
+        toterName: '',
+        toterPhone: '',
+        toterNo: ''
+      },//提交实体
+      flag: true,
     }
   },
   created () {
@@ -80,48 +82,59 @@ export default {
     },
     //创建订单
     initOrder () {
-      let params = {
-        nSceneTimeId: this.CircusInfo.nT_Circus_ID,
-        dSceneStartDate: this.CircusInfo.BeginDate.split(' ')[0],
-        sStartTimeSlot: this.CircusInfo.BeginDate.split(' ')[1],
-        dSceneEndDate: this.CircusInfo.EndDate.split(' ')[0],
-        sEndTimeSlot: this.CircusInfo.EndDate.split(' ')[1],
-        sIdCard: this.toterInfo.toterNo,
-        sName: this.toterInfo.toterName,
-        sTel: this.toterInfo.toterPhone,
-        OpenID: this.openID
-      }
-      let PHONE_test = /^[1][3,4,5,7,8][0-9]{9}$/;
-      let ID_test = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-      if (this.toterInfo.toterName == '') {
-        Toast('请输入游客姓名')
-        return
-      }
-      if (this.toterInfo.toterPhone == '') {
-        Toast('请输入手机号')
-        return
-      } else if (!PHONE_test.test(this.toterInfo.toterPhone)) {
-        Toast('请输入正确手机号')
-        return
-      }
-      if (this.toterInfo.toterNo == '') {
-        Toast('请输入身份证号')
-        return
-      } else if (!ID_test.test(this.toterInfo.toterNo)) {
-        Toast('请输入正确身份证号')
-        return
-      }
-      this.$ajax.get('SubmitOrder', { OrderJson: JSON.stringify(params) }).then(res => {
-        if (res.Code == '200') {
-          Toast(res.Message);
-          this.$router.push({
-            path: '/OrderDetail',
-            query: { OrderNo: res.Data }
-          })
-        } else {
-          Toast(res.Message)
+      if (this.flag) {
+        this.flag = false
+        Indicator.open('正在提交...');
+        let params = {
+          nSceneTimeId: this.CircusInfo.nT_Circus_ID,
+          dSceneStartDate: this.CircusInfo.BeginDate.split(' ')[0],
+          sStartTimeSlot: this.CircusInfo.BeginDate.split(' ')[1],
+          dSceneEndDate: this.CircusInfo.EndDate.split(' ')[0],
+          sEndTimeSlot: this.CircusInfo.EndDate.split(' ')[1],
+          sIdCard: this.toterInfo.toterNo,
+          sName: this.toterInfo.toterName,
+          sTel: this.toterInfo.toterPhone,
+          OpenID: this.openID
         }
-      })
+        let PHONE_test = /^[1][3,4,5,7,8][0-9]{9}$/;
+        let ID_test = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if (this.toterInfo.toterName == '') {
+          Toast('请输入游客姓名')
+          return
+        }
+        if (this.toterInfo.toterPhone == '') {
+          Toast('请输入手机号')
+          return
+        } else if (!PHONE_test.test(this.toterInfo.toterPhone)) {
+          Toast('请输入正确手机号')
+          return
+        }
+        if (this.toterInfo.toterNo == '') {
+          Toast('请输入身份证号')
+          return
+        } else if (!ID_test.test(this.toterInfo.toterNo)) {
+          Toast('请输入正确身份证号')
+          return
+        }
+        this.$ajax.get('SubmitOrder', { OrderJson: JSON.stringify(params) }).then(res => {
+          if (res.Code == '200') {
+            this.flag = true
+            Indicator.close();
+            Toast(res.Message);
+            this.$router.push({
+              path: '/OrderDetail',
+              query: { OrderNo: res.Data.OrderNo, QrCode: res.Data.QrCode }
+            })
+          } else {
+            this.flag = true
+            Indicator.close();
+            Toast(res.Message)
+          }
+        }).catch(err => {
+          this.flag = true
+          Indicator.close();
+        })
+      }
     }
   }
 }

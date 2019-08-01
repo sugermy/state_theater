@@ -14,7 +14,7 @@
     </div>
     <div class="detail-info">
       <h3 class="d-info-h"><i class="d-info-i"></i>详细信息</h3>
-      <p class="d-info-m">{{CircusInfo.sCircusShowDesc}}</p>
+      <p class="d-info-m">山和水相依，风与雨洗礼。桑干源头，锦绣春秋，以“朔”字为文化符号的城市根脉在追溯、绵延、传承。可以看见峙峪石镞的智慧光芒，可以听见蒙恬筑城的骏马嘶鸣，可以望见宋辽故垒的刀光剑影，可以遇见崇福古刹的禅意幽静;圪针沟大移民的生命悲壮，驼铃商道的蜿蜒而行，还有班婕妤的伤感诗篇，尉迟恭的忠勇美名。难以忘怀太阳照耀下清河行动的坚韧，更会铭刻塞上绿洲、美丽朔州70年播撒绿荫的艰辛。自古而今，岁月流金，这片土地交织着爱与火的热烈，演绎着情与意的隽永，诠释着幸福与首善的内涵，播种着希望与梦想的光荣。</p>
       <button class="btn" @click="goOrder(CircusInfo.nT_Circus_ID)">立即预定</button>
     </div>
   </div>

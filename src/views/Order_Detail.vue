@@ -46,7 +46,7 @@ export default {
       this.$ajax.get('GetOrderDetail', { OrderNo: this.$route.query.OrderNo }).then(res => {
         if (res.Code == '200') {
           this.OrderInfo = res.Data[0] || {}
-          this.creatQrCode(this.OrderInfo.sIdCard)
+          this.creatQrCode(this.$route.query.QrCode)
         }
       })
     },

@@ -13,7 +13,8 @@ Vue.use(MintUI);
 // 实例化AJAX
 // const BASEURL = "http://192.168.33.174";
 // const BASEURL = 'http://192.168.33.174:8084/order/';
-const BASEURL = 'http://192.168.33.153:8009/order/';
+// const BASEURL = 'http://192.168.33.153:8009/order/';
+const BASEURL = 'http://theatre.docomsvr.com/order/';
 
 Vue.prototype.$ajax = new Ajax(BASEURL);
 

@@ -1,14 +1,14 @@
 <template>
   <div class="home-content">
-    <header class="header-show">
+    <!-- <header class="header-show">
       <h3>Hi,<span class="login-name">您好！</span></h3>
       <div class="head-portrait">
         <img src="../assets/theater_small.png">
       </div>
-    </header>
+    </header> -->
     <div class="content-main">
-      <div class="main-header">
-        <!-- <div class="btn-l">
+      <!-- <div class="main-header">
+        <div class="btn-l">
           <span class="btn-i" v-for="(item,index) in tabCard" :key="index" :class="activeTab==index?'btn-active':''" @click="changeTab(index)">{{item}}</span>
         </div>
         <div class="select-r">
@@ -18,8 +18,8 @@
                 {{item.name}}</li>
             </ul>
           </label>
-        </div> -->
-      </div>
+        </div>
+      </div> -->
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" style=" touch-action:pan-y">
         <div class="product-list">
           <div class="pro-item" v-for="(item,index) in prolist" :key="index">
@@ -27,7 +27,9 @@
             <div class="i-info">
               <h3 class="info-title">{{item.sCircusShowName}}</h3>
               <p class="info-time">时间：{{(item.BeginDate?item.BeginDate+' - '+item.EndDate.split(' ')[1]:'')}}</p>
-              <p class="info-explain">{{item.sCircusShowDesc}}</p>
+              <p class="info-explain">
+                山和水相依，风与雨洗礼。桑干源头，锦绣春秋，以“朔”字为文化符号的城市根脉在追溯、绵延、传承。可以看见峙峪石镞的智慧光芒，可以听见蒙恬筑城的骏马嘶鸣，可以望见宋辽故垒的刀光剑影，可以遇见崇福古刹的禅意幽静;圪针沟大移民的生命悲壮，驼铃商道的蜿蜒而行，还有班婕妤的伤感诗篇，尉迟恭的忠勇美名。难以忘怀太阳照耀下清河行动的坚韧，更会铭刻塞上绿洲、美丽朔州70年播撒绿荫的艰辛。自古而今，岁月流金，这片土地交织着爱与火的热烈，演绎着情与意的隽永，诠释着幸福与首善的内涵，播种着希望与梦想的光荣。
+              </p>
               <p class="info-less">剩余：{{item.nPersonNumber}}</p>
               <span class="ready-go" @click="toDetail(item.nPersonNumber,item.nT_Circus_ID)">立即抢票</span>
             </div>
@@ -210,7 +212,9 @@ export default {
       }
     }
     .product-list {
-      height: calc(100% - 60px);
+      // height: calc(100% - 60px);
+      height: 100%;
+      margin-top: 8px;
       .pro-item {
         height: 140px;
         background: rgba(255, 255, 255, 1);
@@ -261,7 +265,7 @@ export default {
           .ready-go {
             position: absolute;
             right: 0%;
-            bottom: -14%;
+            bottom: -12%;
             width: 80px;
             height: 30px;
             line-height: 30px;
