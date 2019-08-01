@@ -20,9 +20,9 @@
           </label>
         </div>
       </div> -->
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" style=" touch-action:pan-y">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" style="heigth:100%;touch-action:pan-y">
         <div class="product-list">
-          <div class="pro-item" v-for="(item,index) in prolist" :key="index">
+          <div class="pro-item" v-for="(item,index) in prolist" :key="index" @click="toDetail(item.nPersonNumber,item.nT_Circus_ID)">
             <img src="../assets/theater_small.png" class="">
             <div class="i-info">
               <h3 class="info-title">{{item.sCircusShowName}}</h3>
@@ -31,7 +31,7 @@
                 山和水相依，风与雨洗礼。桑干源头，锦绣春秋，以“朔”字为文化符号的城市根脉在追溯、绵延、传承。可以看见峙峪石镞的智慧光芒，可以听见蒙恬筑城的骏马嘶鸣，可以望见宋辽故垒的刀光剑影，可以遇见崇福古刹的禅意幽静;圪针沟大移民的生命悲壮，驼铃商道的蜿蜒而行，还有班婕妤的伤感诗篇，尉迟恭的忠勇美名。难以忘怀太阳照耀下清河行动的坚韧，更会铭刻塞上绿洲、美丽朔州70年播撒绿荫的艰辛。自古而今，岁月流金，这片土地交织着爱与火的热烈，演绎着情与意的隽永，诠释着幸福与首善的内涵，播种着希望与梦想的光荣。
               </p>
               <p class="info-less">剩余：{{item.nPersonNumber}}</p>
-              <span class="ready-go" @click="toDetail(item.nPersonNumber,item.nT_Circus_ID)">立即抢票</span>
+              <span class="ready-go" @click.stop="toDetail(item.nPersonNumber,item.nT_Circus_ID)">立即抢票</span>
             </div>
           </div>
         </div>
@@ -127,6 +127,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .home-content {
+  height: 100%;
   .header-show {
     height: 60px;
     line-height: 60px;
@@ -153,6 +154,7 @@ export default {
   .content-main {
     background: rgb(243, 247, 250);
     padding: 0 12px;
+    height: 100%;
     .main-header {
       height: 60px;
       line-height: 60px;
@@ -212,8 +214,8 @@ export default {
       }
     }
     .product-list {
-      // height: calc(100% - 60px);
-      height: 100%;
+      height: calc(100vh - 8px);
+      // height: 100%;
       margin-top: 8px;
       .pro-item {
         height: 140px;

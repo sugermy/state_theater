@@ -8,7 +8,7 @@
     </div>
 
     <div class="lists" v-if="hasData">
-      <div class="item" v-for="(item,index) in orderList" :key="index" @click="goDetail(item.sOrderNo)">
+      <div class="item" v-for="(item,index) in orderList" :key="index" @click="goDetail(item.sOrderNo,item.sbarcode)">
         <div class="item-img-div">
           <img src="../assets/theater_small.png" class="item-img" />
         </div>
@@ -70,10 +70,10 @@ export default {
       })
     },
     //查看订单详情
-    goDetail (v) {
+    goDetail (v, q) {
       this.$router.push({
         path: '/OrderDetail',
-        query: { OrderNo: v }
+        query: { OrderNo: v, QrCode: q }
       })
     },
     //切换tab

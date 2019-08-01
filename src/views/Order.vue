@@ -18,15 +18,15 @@
       <div class="p-master">
         <p class="p-master-i">
           <label class="p-master-lab">姓名</label>
-          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterName" :value="toterInfo.toterName" @input="changeData($event,1)" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterName" @click="clickEvent" :value="toterInfo.toterName" @focus="downEvent" @input="changeData($event,1)" />
         </p>
         <p class="p-master-i">
           <label class="p-master-lab">手机号</label>
-          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterPhone" :value="toterInfo.toterPhone" @input="changeData($event,2)" />
+          <input class="p-master-ipt" type="number" :v-model="toterInfo.toterPhone" @click="clickEvent" :value="toterInfo.toterPhone" @focus="downEvent" @input="changeData($event,2)" />
         </p>
         <p class="p-master-i">
           <label class="p-master-lab">身份证</label>
-          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterNo" :value="toterInfo.toterNo" @input="changeData($event,3)" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterNo" @click="clickEvent"  :value="toterInfo.toterNo" @focus="downEvent" @input="changeData($event,3)" />
         </p>
       </div>
     </div>
@@ -57,7 +57,16 @@ export default {
       this.getProInfo(this.$route.query.Circus_ID)
     }
   },
+  mounted(){
+
+  },
   methods: {
+    downEvent () {
+      window.scrollTo({ top: 150, left: 0, behavior: 'smooth' })
+    },
+    clickEvent(e){
+      e.target.focus()
+    },
     //数据变化
     changeData (e, n) {
       switch (n) {
@@ -65,9 +74,17 @@ export default {
           this.toterInfo.toterName = e.target.value;
           break;
         case 2:
+          if(e.target.value.length>11){
+            e.target.value=e.target.value.slice(0,11)
+          }
           this.toterInfo.toterPhone = e.target.value;
           break;
         case 3:
+          var IDtest = /[^A-Za-z0-9]/g
+          e.target.value = e.target.value.replace(/[^A-Za-z0-9]/g, '');
+          if(e.target.value.length>18){
+            e.target.value=e.target.value.slice(0,18)
+          }
           this.toterInfo.toterNo = e.target.value;
           break;
         default:
@@ -84,7 +101,6 @@ export default {
     initOrder () {
       if (this.flag) {
         this.flag = false
-        Indicator.open('正在提交...');
         let params = {
           nSceneTimeId: this.CircusInfo.nT_Circus_ID,
           dSceneStartDate: this.CircusInfo.BeginDate.split(' ')[0],
@@ -100,22 +116,29 @@ export default {
         let ID_test = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
         if (this.toterInfo.toterName == '') {
           Toast('请输入游客姓名')
+          this.flag = true
           return
         }
         if (this.toterInfo.toterPhone == '') {
           Toast('请输入手机号')
+          this.flag = true
           return
         } else if (!PHONE_test.test(this.toterInfo.toterPhone)) {
           Toast('请输入正确手机号')
+          this.flag = true
           return
         }
         if (this.toterInfo.toterNo == '') {
           Toast('请输入身份证号')
+          this.flag = true
           return
         } else if (!ID_test.test(this.toterInfo.toterNo)) {
           Toast('请输入正确身份证号')
+          this.flag = true
           return
         }
+        Indicator.open('正在提交...');
+
         this.$ajax.get('SubmitOrder', { OrderJson: JSON.stringify(params) }).then(res => {
           if (res.Code == '200') {
             this.flag = true

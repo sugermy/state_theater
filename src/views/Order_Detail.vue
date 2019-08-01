@@ -14,7 +14,8 @@
       </div>
       <div class="main-qr">
         <div class="qrcode" ref="qrCodeUrl"></div>
-        <p class="qrcode-t">入园请刷二维码</p>
+        <p class="qrcode-t">请凭身份证前往自助机取票</p>
+        <p class="qrcode-t">座位号：{{OrderInfo.Seat}}</p>
       </div>
     </div>
     <div class="tourist-info">
