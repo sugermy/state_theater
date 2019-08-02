@@ -18,15 +18,17 @@
       <div class="p-master">
         <p class="p-master-i">
           <label class="p-master-lab">姓名</label>
-          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterName" @click="clickEvent" :value="toterInfo.toterName" @focus="downEvent" @input="changeData($event,1)" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterName"  @click="clickEvent" :value="toterInfo.toterName" @focus="downEvent"
+            @input="changeData($event,1)" />
         </p>
         <p class="p-master-i">
           <label class="p-master-lab">手机号</label>
-          <input class="p-master-ipt" type="number" :v-model="toterInfo.toterPhone" @click="clickEvent" :value="toterInfo.toterPhone" @focus="downEvent" @input="changeData($event,2)" />
+          <input class="p-master-ipt" type="number" pattern="[0-9]*" :v-model="toterInfo.toterPhone" @click="clickEvent" :value="toterInfo.toterPhone" @focus="downEvent"
+            @input="changeData($event,2)" />
         </p>
         <p class="p-master-i">
           <label class="p-master-lab">身份证</label>
-          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterNo" @click="clickEvent"  :value="toterInfo.toterNo" @focus="downEvent" @input="changeData($event,3)" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterNo" @keypress="keyEvent"  @click="clickEvent" :value="toterInfo.toterNo" @focus="downEvent" @input="changeData($event,3)" />
         </p>
       </div>
     </div>
@@ -45,7 +47,7 @@ export default {
       openID: '',
       toterInfo: {
         toterName: '',
-        toterPhone: '',
+        toterPhone: null,
         toterNo: ''
       },//提交实体
       flag: true,
@@ -57,15 +59,21 @@ export default {
       this.getProInfo(this.$route.query.Circus_ID)
     }
   },
-  mounted(){
+  mounted () {
 
   },
   methods: {
     downEvent () {
       window.scrollTo({ top: 150, left: 0, behavior: 'smooth' })
     },
-    clickEvent(e){
+    clickEvent (e) {
       e.target.focus()
+    },
+    //控制键盘输入事件
+    keyEvent(e){
+      if(/[^A-Za-z0-9]/g.test(e.key)){
+        e.preventDefault()
+      }
     },
     //数据变化
     changeData (e, n) {
@@ -74,16 +82,14 @@ export default {
           this.toterInfo.toterName = e.target.value;
           break;
         case 2:
-          if(e.target.value.length>11){
-            e.target.value=e.target.value.slice(0,11)
+          if (e.target.value.length > 11) {
+            e.target.value = e.target.value.slice(0, 11)
           }
           this.toterInfo.toterPhone = e.target.value;
           break;
         case 3:
-          var IDtest = /[^A-Za-z0-9]/g
-          e.target.value = e.target.value.replace(/[^A-Za-z0-9]/g, '');
-          if(e.target.value.length>18){
-            e.target.value=e.target.value.slice(0,18)
+          if (e.target.value.length > 18) {
+            e.target.value = e.target.value.slice(0, 18)
           }
           this.toterInfo.toterNo = e.target.value;
           break;
