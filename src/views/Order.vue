@@ -18,7 +18,7 @@
       <div class="p-master">
         <p class="p-master-i">
           <label class="p-master-lab">姓名</label>
-          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterName"  @click="clickEvent" :value="toterInfo.toterName" @focus="downEvent"
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterName" @click="clickEvent" :value="toterInfo.toterName" @focus="downEvent"
             @input="changeData($event,1)" />
         </p>
         <p class="p-master-i">
@@ -28,7 +28,8 @@
         </p>
         <p class="p-master-i">
           <label class="p-master-lab">身份证</label>
-          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterNo" @keypress="keyEvent"  @click="clickEvent" :value="toterInfo.toterNo" @focus="downEvent" @input="changeData($event,3)" />
+          <input class="p-master-ipt" type="text" :v-model="toterInfo.toterNo" @keypress="keyEvent" @click="clickEvent" :value="toterInfo.toterNo" @focus="downEvent"
+            @input="changeData($event,3)" />
         </p>
       </div>
     </div>
@@ -38,73 +39,71 @@
   </div>
 </template>
 <script>
-import { Toast, Indicator } from 'mint-ui';
+import { Toast, Indicator } from 'mint-ui'
 export default {
-  data () {
+  data() {
     return {
       imgUrl: require('../assets/theater_small.png'),
-      CircusInfo: {},//初始化信息
+      CircusInfo: {}, //初始化信息
       openID: '',
       toterInfo: {
         toterName: '',
         toterPhone: null,
         toterNo: ''
-      },//提交实体
-      flag: true,
+      }, //提交实体
+      flag: true
     }
   },
-  created () {
-    this.openID = localStorage.getItem('openId') || '';
+  created() {
+    this.openID = localStorage.getItem('openId') || ''
     if (this.$route.query.Circus_ID) {
       this.getProInfo(this.$route.query.Circus_ID)
     }
   },
-  mounted () {
-
-  },
+  mounted() {},
   methods: {
-    downEvent () {
+    downEvent() {
       window.scrollTo({ top: 150, left: 0, behavior: 'smooth' })
     },
-    clickEvent (e) {
+    clickEvent(e) {
       e.target.focus()
     },
     //控制键盘输入事件
-    keyEvent(e){
-      if(/[^A-Za-z0-9]/g.test(e.key)){
+    keyEvent(e) {
+      if (/[^A-Za-z0-9]/g.test(e.key)) {
         e.preventDefault()
       }
     },
     //数据变化
-    changeData (e, n) {
+    changeData(e, n) {
       switch (n) {
         case 1:
-          this.toterInfo.toterName = e.target.value;
-          break;
+          this.toterInfo.toterName = e.target.value
+          break
         case 2:
           if (e.target.value.length > 11) {
             e.target.value = e.target.value.slice(0, 11)
           }
-          this.toterInfo.toterPhone = e.target.value;
-          break;
+          this.toterInfo.toterPhone = e.target.value
+          break
         case 3:
           if (e.target.value.length > 18) {
             e.target.value = e.target.value.slice(0, 18)
           }
-          this.toterInfo.toterNo = e.target.value;
-          break;
+          this.toterInfo.toterNo = e.target.value
+          break
         default:
-          break;
+          break
       }
     },
     //获取产品详情
-    getProInfo (id) {
+    getProInfo(id) {
       this.$ajax.get('GetProductList', { Circus_ID: id }).then(res => {
         this.CircusInfo = res.Data[0] || {}
       })
     },
     //创建订单
-    initOrder () {
+    initOrder() {
       if (this.flag) {
         this.flag = false
         let params = {
@@ -118,8 +117,8 @@ export default {
           sTel: this.toterInfo.toterPhone,
           OpenID: this.openID
         }
-        let PHONE_test = /^[1][3,4,5,7,8][0-9]{9}$/;
-        let ID_test = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        let PHONE_test = /^[1][3,4,5,7,8][0-9]{9}$/
+        let ID_test = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
         if (this.toterInfo.toterName == '') {
           Toast('请输入游客姓名')
           this.flag = true
@@ -143,26 +142,29 @@ export default {
           this.flag = true
           return
         }
-        Indicator.open('正在提交...');
+        Indicator.open('正在提交...')
 
-        this.$ajax.get('SubmitOrder', { OrderJson: JSON.stringify(params) }).then(res => {
-          if (res.Code == '200') {
+        this.$ajax
+          .get('SubmitOrder', { OrderJson: JSON.stringify(params) })
+          .then(res => {
+            if (res.Code == '200') {
+              this.flag = true
+              Indicator.close()
+              Toast(res.Message)
+              this.$router.push({
+                path: '/OrderDetail',
+                query: { OrderNo: res.Data.OrderNo, QrCode: res.Data.QrCode }
+              })
+            } else {
+              this.flag = true
+              Indicator.close()
+              Toast(res.Message)
+            }
+          })
+          .catch(err => {
             this.flag = true
-            Indicator.close();
-            Toast(res.Message);
-            this.$router.push({
-              path: '/OrderDetail',
-              query: { OrderNo: res.Data.OrderNo, QrCode: res.Data.QrCode }
-            })
-          } else {
-            this.flag = true
-            Indicator.close();
-            Toast(res.Message)
-          }
-        }).catch(err => {
-          this.flag = true
-          Indicator.close();
-        })
+            Indicator.close()
+          })
       }
     }
   }
