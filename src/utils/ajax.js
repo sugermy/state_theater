@@ -18,7 +18,7 @@ export default class Ajax {
         return config;
       },
       error => {
-        Toast('请求失败');
+        Toast('请求连接失败');
         return Promise.reject(error);
       }
     );
@@ -28,13 +28,13 @@ export default class Ajax {
           if (response.data) {
             return response.data;
           } else {
-            Toast('请求失败');
+            Toast('响应状态失败');
             return response;
           }
         }
       },
       error => {
-        Toast('请求失败');
+        Toast('响应数据失败');
         return Promise.reject(error);
       }
     );

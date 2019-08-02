@@ -10,7 +10,7 @@
     <div class="lists" v-if="hasData">
       <div class="item" v-for="(item,index) in orderList" :key="index" @click="goDetail(item.sOrderNo,item.sbarcode)">
         <div class="item-img-div">
-          <img src="../assets/theater_small.png" class="item-img" />
+          <img src="../assets/theater_small.jpg" class="item-img" />
         </div>
         <div class="item-content">
           <div class="item-div">
@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import { Toast } from 'mint-ui';
+import { Toast } from 'mint-ui'
 
 export default {
-  data () {
+  data() {
     return {
       msg: '1123',
       activeTab: 0,
@@ -49,35 +49,37 @@ export default {
       orderList: {}
     }
   },
-  created () {
-    this.openID = localStorage.getItem('openId') || '';
+  created() {
+    this.openID = localStorage.getItem('openId') || ''
     this.getOrderList(this.openID)
   },
   methods: {
-    getOrderList (v) {
-      this.$ajax.get('GetOrderList', { openId: v, Type: this.activeTab }).then(res => {
-        if (res.Code == '200') {
-          if (res.Data && res.Data.length > 0) {
-            this.hasData = true
-            this.orderList = res.Data || []
+    getOrderList(v) {
+      this.$ajax
+        .get('GetOrderList', { openId: v, Type: this.activeTab })
+        .then(res => {
+          if (res.Code == '200') {
+            if (res.Data && res.Data.length > 0) {
+              this.hasData = true
+              this.orderList = res.Data || []
+            } else {
+              this.hasData = false
+            }
           } else {
             this.hasData = false
+            // Toast(res.Message)
           }
-        } else {
-          this.hasData = false
-          // Toast(res.Message)
-        }
-      })
+        })
     },
     //查看订单详情
-    goDetail (v, q) {
+    goDetail(v, q) {
       this.$router.push({
         path: '/OrderDetail',
         query: { OrderNo: v, QrCode: q }
       })
     },
     //切换tab
-    changeTab (i) {
+    changeTab(i) {
       this.activeTab = i
       this.getOrderList(this.openID)
     }
@@ -90,6 +92,8 @@ export default {
   position: relative;
   height: 100%;
   background: #f3f7fa;
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
   .header-top {
     background: #fff;
     .header {

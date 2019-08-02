@@ -43,7 +43,7 @@ import { Toast, Indicator } from 'mint-ui'
 export default {
   data() {
     return {
-      imgUrl: require('../assets/theater_small.png'),
+      imgUrl: require('../assets/theater_small.jpg'),
       CircusInfo: {}, //初始化信息
       openID: '',
       toterInfo: {
@@ -163,6 +163,7 @@ export default {
           })
           .catch(err => {
             this.flag = true
+            Toast('服务响应错误')
             Indicator.close()
           })
       }
@@ -174,7 +175,9 @@ export default {
 .order-content {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+  // overflow: hidden;
   background: rgba(243, 247, 250, 1);
   .pro-item {
     height: 140px;

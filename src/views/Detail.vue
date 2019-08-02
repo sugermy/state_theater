@@ -1,47 +1,71 @@
 <template>
   <div class="por-detail">
-    <div class="pro-main">
-      <img :src="imgUrl">
-      <h3 class="d-title">{{CircusInfo.sCircusShowName}}</h3>
-      <div class="d-time">场次信息：{{(CircusInfo.BeginDate?CircusInfo.BeginDate+' - '+CircusInfo.EndDate.split(' ')[1]:'')}}</div>
-      <p class="d-num">剩余：{{CircusInfo.nPersonNumber}}</p>
-      <div class="d-rules">
-        <div class="d-rules-i" v-for="(item,index) in rules" :key="index">
-          <i class="d-rules-icon"></i>
-          <span class="d-rules-t">{{item}}</span>
+    <div>
+      <div class="pro-main">
+        <img :src="imgUrl">
+        <h3 class="d-title">{{CircusInfo.sCircusShowName}}</h3>
+        <div class="d-time">场次信息：{{(CircusInfo.BeginDate?CircusInfo.BeginDate+' - '+CircusInfo.EndDate.split(' ')[1]:'')}}</div>
+        <p class="d-num">剩余：{{CircusInfo.nPersonNumber}}</p>
+        <div class="d-rules">
+          <div class="d-rules-i" v-for="(item,index) in rules" :key="index">
+            <i class="d-rules-icon"></i>
+            <span class="d-rules-t">{{item}}</span>
+          </div>
         </div>
       </div>
+      <div class="detail-info">
+        <div>
+          <h3 class="d-info-h"><i class="d-info-i"></i>详细信息</h3>
+          <p class="d-info-m">
+            “寻梦桑源”大型山水实景文艺演出项目是朔城区委、区政府为了满足群众文化需求，发展生态休闲康养和文化旅游产业，构建现代服务产业体系，建设“幸福之城，首善之区”的重要举措。演出以天为幕、湖为台，山水为景，灯光炫彩，美轮美奂。盛夏之夜，传奇再现，金沙植物园，开启寻梦家园、寻梦桑源、寻梦朔州之旅。演出活动从2019年8月正式开始，以后每年从6月-10月演出4个月，每周五、周六晚上进行公演。
+          </p>
+        </div>
+        <!-- <div>
+          <h3 class="d-info-h"><i class="d-info-i"></i>订票方式</h3>
+          <div class="d-info-m">
+            <p>1、关注朔州市朔城区文化和旅游局微信公众号</p>
+            <p>2、微信公众号点击【寻梦桑源订票】</p>
+            <p>3、进入订票界面，可看到对应的可订票演出时间和剩余数量</p>
+            <p>4、点击立即订票</p>
+            <p>5、进入详细信息介绍，马上点击立即订票</p>
+            <p>6、填写姓名、手机号、身份证信息 ，即可提交订票，确定订单有余数后提示订票成功</p>
+            <p>7、订票成功后，在微信公众号中点击【我的订单】</p>
+            <p>8、点击订单详情后显示对应的二维码取票信息</p>
+            <p>9、凭该二维码到区文化和旅游局二楼自助机打印门票进入观演会场</p>
+          </div>
+        </div> -->
+      </div>
     </div>
-    <div class="detail-info">
-      <h3 class="d-info-h"><i class="d-info-i"></i>详细信息</h3>
-      <p class="d-info-m">山和水相依，风与雨洗礼。桑干源头，锦绣春秋，以“朔”字为文化符号的城市根脉在追溯、绵延、传承。可以看见峙峪石镞的智慧光芒，可以听见蒙恬筑城的骏马嘶鸣，可以望见宋辽故垒的刀光剑影，可以遇见崇福古刹的禅意幽静;圪针沟大移民的生命悲壮，驼铃商道的蜿蜒而行，还有班婕妤的伤感诗篇，尉迟恭的忠勇美名。难以忘怀太阳照耀下清河行动的坚韧，更会铭刻塞上绿洲、美丽朔州70年播撒绿荫的艰辛。自古而今，岁月流金，这片土地交织着爱与火的热烈，演绎着情与意的隽永，诠释着幸福与首善的内涵，播种着希望与梦想的光荣。</p>
-      <button class="btn" @click="goOrder(CircusInfo.nT_Circus_ID)">立即预定</button>
-    </div>
+    <button class="btn" @click="goOrder(CircusInfo.nT_Circus_ID)">立即预定</button>
   </div>
 </template>
 <script>
-import { Toast } from 'mint-ui';
+import { Toast } from 'mint-ui'
 
 export default {
-  data () {
+  data() {
     return {
-      imgUrl: require('../assets/theater_big.png'),
+      imgUrl: require('../assets/theater_big.jpg'),
       rules: ['电子票', '线下选座', '身份证'],
       CircusInfo: {}
     }
   },
-  created () {
-    this.$route.query.Circus_ID ? (this.getProInfo(this.$route.query.Circus_ID)) : Toast('获取详情失败')
+  created() {
+    this.$route.query.Circus_ID
+      ? this.getProInfo(this.$route.query.Circus_ID)
+      : Toast('获取详情失败')
   },
   methods: {
     //获取产品详情
-    getProInfo (id) {
+    getProInfo(id) {
       this.$ajax.get('GetProductList', { Circus_ID: id }).then(res => {
-        res.Code == '200' ? (this.CircusInfo = res.Data[0] || {}) : Toast('获取详情失败')
+        res.Code == '200'
+          ? (this.CircusInfo = res.Data[0] || {})
+          : Toast('获取详情失败')
       })
     },
     //判断余票数据
-    hasNum (v) {
+    hasNum(v) {
       this.$ajax.get('UpdateOccupancy', { Circus_ID: v }).then(res => {
         if (res.Data == 'true') {
           this.$router.push({
@@ -54,21 +78,24 @@ export default {
       })
     },
     //提交预定
-    goOrder (Circus_ID) {
+    goOrder(Circus_ID) {
       if (Circus_ID) {
         this.hasNum(Circus_ID)
       }
-    },
+    }
   }
 }
 </script>
 <style lang="less" scoped>
 .por-detail {
   width: 100%;
-  height: 100%;
-  background: rgba(243, 247, 250, 1);
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+  background: #fff;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   .pro-main {
     background: #fff;
     padding-bottom: 6px;
@@ -142,7 +169,8 @@ export default {
   }
   .detail-info {
     background: #fff;
-    height: calc(100vh - 381px);
+    display: flex;
+    flex-direction: column;
     .d-info-h {
       padding: 0 12px;
       font-size: 13px;
@@ -162,7 +190,7 @@ export default {
     }
     .d-info-m {
       float: left;
-      min-height: calc(100% - 80px);
+      // min-height: calc(100% - 80px);
       padding: 0 12px;
       font-size: 12px;
       font-family: PingFang-SC-Regular;
@@ -171,18 +199,17 @@ export default {
       line-height: 22px;
       overflow: hidden;
     }
-    .btn {
-      float: left;
-      border: none;
-      width: 100%;
-      height: 45px;
-      background: rgba(50, 133, 255, 1);
-      font-size: 17px;
-      margin-top: 8px;
-      font-family: PingFang-SC-Medium;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 1);
-    }
+  }
+  .btn {
+    border: none;
+    width: 100%;
+    height: 45px;
+    background: rgba(50, 133, 255, 1);
+    font-size: 17px;
+    margin-top: 8px;
+    font-family: PingFang-SC-Medium;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 1);
   }
 }
 </style>

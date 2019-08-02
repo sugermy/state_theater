@@ -29,30 +29,32 @@
   </div>
 </template>
 <script>
-import { Toast } from 'mint-ui';
+import { Toast } from 'mint-ui'
 import QRCode from 'qrcodejs2'
 export default {
-  data () {
+  data() {
     return {
-      imgUrl: require('../assets/theater_small.png'),
+      imgUrl: require('../assets/theater_small.jpg'),
       OrderInfo: {}
     }
   },
-  created () {
+  created() {
     this.$route.query.OrderNo ? this.getDetail() : Toast('获取订单详情失败')
   },
   methods: {
     //获取用户生成订单详情
-    getDetail () {
-      this.$ajax.get('GetOrderDetail', { OrderNo: this.$route.query.OrderNo }).then(res => {
-        if (res.Code == '200') {
-          this.OrderInfo = res.Data[0] || {}
-          this.creatQrCode(this.$route.query.QrCode)
-        }
-      })
+    getDetail() {
+      this.$ajax
+        .get('GetOrderDetail', { OrderNo: this.$route.query.OrderNo })
+        .then(res => {
+          if (res.Code == '200') {
+            this.OrderInfo = res.Data[0] || {}
+            this.creatQrCode(this.$route.query.QrCode)
+          }
+        })
     },
     //创建二维码
-    creatQrCode (IDcard) {
+    creatQrCode(IDcard) {
       new QRCode(this.$refs.qrCodeUrl, {
         text: IDcard,
         width: 100,
@@ -70,7 +72,8 @@ export default {
   width: calc(100% - 20px);
   height: 100%;
   background: rgba(50, 133, 255, 1);
-  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
   padding: 0 10px;
   .main-info {
     width: 100%;
