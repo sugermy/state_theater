@@ -1,17 +1,17 @@
-import Vue from 'vue';
-import './plugins/axios';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-import FastClick from 'fastclick';
-import MintUI from 'mint-ui';
-import 'mint-ui/lib/style.css';
-import './style/reset.less';
-import Ajax from './utils/ajax';
+import Vue from "vue";
+import "./plugins/axios";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import FastClick from "fastclick";
+import MintUI from "mint-ui";
+import "mint-ui/lib/style.css";
+import "./style/reset.less";
+import Ajax from "./utils/ajax";
 Vue.use(MintUI);
 
 // 实例化AJAX
-const BASEURL = 'http://192.168.33.174:8084/order/';
+const BASEURL = "http://192.168.33.174:8084/order/";
 // const BASEURL = 'http://192.168.33.153:8009/order/';
 // const BASEURL = 'http://theatre.docomsvr.com/order/';
 
@@ -24,7 +24,7 @@ new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app');
+}).$mount("#app");
 
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {
