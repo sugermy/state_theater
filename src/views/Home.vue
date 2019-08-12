@@ -1,11 +1,11 @@
 <template>
   <div class="home-content">
-    <!-- <header class="header-show">
-      <h3>Hi,<span class="login-name">您好！</span></h3>
+    <header class="header-show">
+      <h3>Hi,<span class="login-name">{{loginName}}</span></h3>
       <div class="head-portrait">
-        <img src="../assets/theater_small.jpg">
+        <img :src="imgSrc">
       </div>
-    </header> -->
+    </header>
     <div class="content-main">
       <!-- <div class="main-header">
         <div class="btn-l">
@@ -46,12 +46,12 @@ import { Toast } from 'mint-ui'
 export default {
   data() {
     return {
-      loginName: '小笼包',
+      loginName: '',
       tabCard: ['最近', '最热'],
       activeTab: 0,
       pllMenuOpen: false, //下拉菜单显示隐藏
       seletID: 0,
-      userImg: '',
+      imgSrc: '',
       selectArr: [
         {
           name: '全部时间',
@@ -74,7 +74,10 @@ export default {
     }
   },
   created() {
-    this.getProList()
+    this.getProList() //
+    this.imgSrc =
+      localStorage.getItem('headimgurl') || require('../assets/logo.jpg')
+    this.loginName = localStorage.getItem('nickname') || '您好！'
   },
   mounted() {
     this.seletID = this.selectArr[0].index
@@ -85,7 +88,7 @@ export default {
       this.$ajax.get('GetProductList', { Circus_ID: '' }).then(res => {
         res.Code == '200'
           ? (this.prolist = res.Data || [])
-          : Toast('获取产品失败')
+          : Toast('当前时间段暂无场次信息')
       })
     },
     //切换tab 热门 最新

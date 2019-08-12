@@ -49,6 +49,16 @@ export default {
         .then(res => {
           if (res.Code == '200') {
             this.OrderInfo = res.Data[0] || {}
+            this.OrderInfo.sName = this.OrderInfo.sName.slice(0, 1) + '**'
+
+            this.OrderInfo.sTel =
+              this.OrderInfo.sTel.slice(0, 3) +
+              '****' +
+              this.OrderInfo.sTel.slice(7, 11)
+            this.OrderInfo.sIdCard =
+              this.OrderInfo.sIdCard.slice(0, 4) +
+              '******' +
+              this.OrderInfo.sIdCard.slice(14, 18)
             this.creatQrCode(this.$route.query.QrCode)
           }
         })
