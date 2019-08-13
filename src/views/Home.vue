@@ -1,7 +1,7 @@
 <template>
   <div class="home-content">
     <header class="header-show">
-      <h3>Hi,<span class="login-name">{{loginName}}</span></h3>
+      <h3>Hi,<span class="login-name" v-text="loginName"></span></h3>
       <div class="head-portrait">
         <img :src="imgSrc">
       </div>
@@ -28,7 +28,7 @@
             <h3 class="info-title">{{item.sCircusShowName}}</h3>
             <p class="info-time">时间：{{(item.BeginDate?item.BeginDate+' - '+item.EndDate.split(' ')[1]:'')}}</p>
             <p class="info-explain">
-              山和水相依，风与雨洗礼。桑干源头，锦绣春秋，以“朔”字为文化符号的城市根脉在追溯、绵延、传承。可以看见峙峪石镞的智慧光芒，可以听见蒙恬筑城的骏马嘶鸣，可以望见宋辽故垒的刀光剑影，可以遇见崇福古刹的禅意幽静;圪针沟大移民的生命悲壮，驼铃商道的蜿蜒而行，还有班婕妤的伤感诗篇，尉迟恭的忠勇美名。难以忘怀太阳照耀下清河行动的坚韧，更会铭刻塞上绿洲、美丽朔州70年播撒绿荫的艰辛。自古而今，岁月流金，这片土地交织着爱与火的热烈，演绎着情与意的隽永，诠释着幸福与首善的内涵，播种着希望与梦想的光荣。
+              “寻梦桑源”大型山水实景文艺演出项目是朔城区委、区政府为了满足群众文化需求，发展生态休闲康养和文化旅游产业，构建现代服务产业体系，建设“幸福之城，首善之区”的重要举措。演出以天为幕、湖为台，山水为景，灯光炫彩，美轮美奂。盛夏之夜，传奇再现，金沙植物园，开启寻梦家园、寻梦桑源、寻梦朔州之旅。演出活动从2019年8月正式开始，以后每年从6月-10月演出4个月，每周五、周六晚上进行公演。
             </p>
             <p class="info-less">剩余：{{item.nPersonNumber}}</p>
             <span class="ready-go" @click.stop="toDetail(item.nPersonNumber,item.nT_Circus_ID)">立即抢票</span>
