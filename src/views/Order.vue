@@ -148,7 +148,6 @@ export default {
 					.get('SubmitOrder', { OrderJson: JSON.stringify(params) })
 					.then(res => {
 						if (res.Code == '200') {
-							this.flag = true
 							Indicator.close()
 							Toast(res.Message)
 							this.$router.push({
@@ -156,15 +155,15 @@ export default {
 								query: { OrderNo: res.Data.OrderNo, QrCode: res.Data.QrCode }
 							})
 						} else {
-							this.flag = true
 							Indicator.close()
 							Toast(res.Message)
+							this.flag = true
 						}
 					})
 					.catch(err => {
-						this.flag = true
 						Toast('服务响应错误')
 						Indicator.close()
+						this.flag = true
 					})
 			}
 		}
