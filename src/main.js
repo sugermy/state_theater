@@ -26,10 +26,10 @@ new Vue({
   render: h => h(App)
 }).$mount("#app");
 
-let userAgent = navigator.userAgent.toLowerCase();
-if (userAgent.indexOf("micromessenger") == -1) {
-  location.href = "/Home/index";
-}
+// let userAgent = navigator.userAgent.toLowerCase();
+// if (userAgent.indexOf("micromessenger") == -1) {
+//   location.href = "/Home/index";
+// }
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
