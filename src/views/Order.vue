@@ -6,9 +6,9 @@
         <div>
           <h3 class="info-title">{{CircusInfo.sCircusShowName}}</h3>
           <p class="info-time">时间：{{(CircusInfo.BeginDate?CircusInfo.BeginDate+' - '+CircusInfo.EndDate.split(' ')[1]:'')}}</p>
-          <p class="info-explain">
+          <!-- <p class="info-explain">
             “寻梦桑源”大型山水实景文艺演出项目是朔城区委、区政府为了满足群众文化需求，发展生态休闲康养和文化旅游产业，构建现代服务产业体系，建设“幸福之城，首善之区”的重要举措。演出以天为幕、湖为台，山水为景，灯光炫彩，美轮美奂。盛夏之夜，传奇再现，金沙植物园，开启寻梦家园、寻梦桑源、寻梦朔州之旅。演出活动从2019年8月正式开始，以后每年从6月-10月演出4个月，每周五、周六晚上进行公演。
-          </p>
+          </p> -->
         </div>
         <p class="info-num">剩余：{{CircusInfo.nPersonNumber}}</p>
       </div>
@@ -43,7 +43,7 @@ import { Toast, Indicator } from 'mint-ui'
 export default {
 	data() {
 		return {
-			imgUrl: require('../assets/theater_small.jpg'),
+			imgUrl: require('../assets/order.jpg'),
 			CircusInfo: {}, //初始化信息
 			openID: '',
 			toterInfo: {

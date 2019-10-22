@@ -11,9 +11,9 @@ import Ajax from "./utils/ajax";
 Vue.use(MintUI);
 
 // 实例化AJAX
-const BASEURL = "http://192.168.33.174:8084/order/";
-// const BASEURL = 'http://192.168.33.153:8009/order/';
-// const BASEURL = "http://theatre.docomsvr.com/order/";
+//const BASEURL = "http://192.168.33.174:8084/order/";
+//const BASEURL = "http://192.168.33.153:8009/order/";
+const BASEURL = "http://theatre.docomsvr.com/order/";
 
 Vue.prototype.$ajax = new Ajax(BASEURL);
 
@@ -26,10 +26,12 @@ new Vue({
   render: h => h(App)
 }).$mount("#app");
 
-// let userAgent = navigator.userAgent.toLowerCase();
-// if (userAgent.indexOf("micromessenger") == -1) {
-//   location.href = "/Home/index";
-// }
+//验证微信登录
+let userAgent = navigator.userAgent.toLowerCase();
+if (userAgent.indexOf("micromessenger") == -1) {
+  location.href = "/Home/index";
+}
+
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {

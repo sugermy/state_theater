@@ -10,7 +10,7 @@
     <div class="lists" v-if="hasData">
       <div class="item" v-for="(item,index) in orderList" :key="index" @click="goDetail(item.sOrderNo,item.sbarcode)">
         <div class="item-img-div">
-          <img src="../assets/theater_small.jpg" class="item-img" />
+          <img src="../assets/order.jpg" class="item-img" />
         </div>
         <div class="item-content">
           <div class="item-div">

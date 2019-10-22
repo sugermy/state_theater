@@ -23,13 +23,13 @@
       <!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" style="min-heigth:100%;touch-action:pan-y"> -->
       <div class="product-list">
         <div class="pro-item" v-for="(item,index) in prolist" :key="index" @click="toDetail(item.nPersonNumber,item.nT_Circus_ID)">
-          <img src="../assets/theater_small.jpg" class="">
+          <img src="../assets/order.jpg" class="">
           <div class="i-info">
             <h3 class="info-title">{{item.sCircusShowName}}</h3>
             <p class="info-time">时间：{{(item.BeginDate?item.BeginDate+' - '+item.EndDate.split(' ')[1]:'')}}</p>
-            <p class="info-explain">
+            <!-- <p class="info-explain">
               “寻梦桑源”大型山水实景文艺演出项目是朔城区委、区政府为了满足群众文化需求，发展生态休闲康养和文化旅游产业，构建现代服务产业体系，建设“幸福之城，首善之区”的重要举措。演出以天为幕、湖为台，山水为景，灯光炫彩，美轮美奂。盛夏之夜，传奇再现，金沙植物园，开启寻梦家园、寻梦桑源、寻梦朔州之旅。演出活动从2019年8月正式开始，以后每年从6月-10月演出4个月，每周五、周六晚上进行公演。
-            </p>
+            </p> -->
             <p class="info-less">剩余：{{item.nPersonNumber}}</p>
             <span class="ready-go" @click.stop="toDetail(item.nPersonNumber,item.nT_Circus_ID)">立即抢票</span>
           </div>
@@ -239,7 +239,7 @@ export default {
 				}
 				.i-info {
 					position: relative;
-					width: calc(100% - 120px);
+					width: calc(100% - 128px);
 					height: 120px;
 					margin-left: 4%;
 					display: flex;
@@ -248,9 +248,12 @@ export default {
 						font-size: 15px;
 						font-weight: 600;
 						color: rgba(56, 77, 86, 1);
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
 					}
 					.info-time {
-						margin: 10px 0;
+						margin: 7px 0;
 						line-height: 16px;
 						color: rgba(149, 160, 163, 1);
 					}
